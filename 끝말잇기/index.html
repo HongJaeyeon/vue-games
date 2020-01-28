@@ -6,37 +6,57 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+
 <div id="root">
-    <div>{{word}}</div>
-    <form v-on:submit="onSubmitForm">
-        <input type="text" refs="answer" v-model="value">
-        <button type="submit">입력</button>
-    </form>
-    <div id="result"> {{result}}</div>
+    <word-list start-word="뚤레"></word-list>
+    <word-list start-word="강아지"></word-list>
+    <word-list start-word="뚤레는천사"></word-list>
 </div>
+
+
+<script>
+    Vue.component('word-list', {
+        template:`
+        <div>
+        <div>{{word}}</div>
+        <form v-on:submit="onSubmitForm">
+            <input type="text" refs="answer" v-model="value">
+            <button type="submit">입력</button>
+        </form>
+        <div id="result"> {{result}}</div>
+        </div>
+        `,
+
+        props: ['startWord'],
+
+        data() {
+            return{
+                word: this.startWord,
+                result: '',
+                value: '',
+            };
+        },
+
+        methods: {
+            onSubmitForm(e) {
+                e.preventDefault();
+                if (this.word[this.word.length-1] === this.value[0]){
+                    this.result = "정답뚤";
+                    this.word = this.value;
+                    this.value = '';
+                    this.$refs.answer.focus();
+                }else{
+                    this.result = "틀렸뚤, 다시해보 개(dog)";
+                    this.value = '';
+                    this.$refs.answer.focus();
+                }
+            }
+        },
+    })
+</script>
 <script>
     const app = new Vue({
        el: '#root',
-       data:{
-           word: '뚤레',
-           result: '',
-           value: '',
-       },
-       methods: {
-           onSubmitForm(e){
-               e.preventDefault();
-               if (this.word[this.word.length-1] === this.value[0]){
-                   this.result = "정답뚤";
-                   this.word = this.value;
-                   this.value = '';
-                   this.$refs.answer.focus();
-               }else{
-                   this.result = "틀렸뚤, 다시해보 개(dog)";
-                   this.value = '';
-                   this.$refs.answer.focus();
-               }
-           }
-       },
     });
 </script>
 </body>
